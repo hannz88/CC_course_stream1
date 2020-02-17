@@ -66,7 +66,7 @@ barplot(biodiv)
 # Set the limits for the y axis
 
 # We also want to save our plot
-png("barplot.png", width=950, height=500)
+png("../barplot.png", width=950, height=500)
 barplot(biodiv, xlab="Taxa" ,ylab="Number of species", ylim=c(0,900), cex.axis=1.5, cex.lab=1.5)
 dev.off()
 
@@ -92,11 +92,11 @@ taxa <- c("Beetle",
 taxa_f <- factor(taxa)
 richness <- c(a,b,c,d,e,f,g,h,i,j,k)
 biodata <- data.frame(taxa_f, richness)
-write.csv(biodata, file="biodata.csv")
+write.csv(biodata, file= "../biodata.csv")
 
 # If we want to make the same barplot using the data frame, not the vector, we need to slightly change the code
 # We need to tell the barplot() function exactly what we want it to plot, in our case the richness
-png("barplot2.png", width=950, height=500)
+png("../barplot2.png", width=950, height=500)
 barplot(biodata$richness, names.arg=c("Beetle", 
                                       "Bird",
                                       "Butterfly",
