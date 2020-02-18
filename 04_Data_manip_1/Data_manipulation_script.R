@@ -4,6 +4,10 @@ setwd("/home/han/PycharmProjects/CC_course_stream1/04_Data_manip_1")
 # Load the elongation data
 elongation <- read.csv("EmpetrumElongation.csv", header = TRUE)   
 
+#import library
+library(tidyr)
+library(dplyr)
+
 # Check import and preview data
 head(elongation)   # first few observations
 str(elongation)    # types of variables
@@ -93,3 +97,47 @@ elong_spread <- spread(elongation_long, Year, Length)
 
 # same as line 86
 elongation_long2 <- gather(elongation, Year, Length, c(3:8))
+
+boxplot(Length ~ Year, data = elongation_long, 
+        xlab = "Year", ylab = "Elongation (cm)", 
+        main = "Annual growth of Empetrum hermaphroditum")
+
+## Dplyr----
+# rename variables----
+# change the names of the columns and overwriting the dataframe
+elong_long <- rename(elong_long, zone=Zone, indiv=Indiv, year=Year, length=Length)
+
+# filter----
+# keep those from zones 2 and 3, and from years 2009 to 2011
+# filter() function works great for subsetting rows with logical operations.
+elong_subset <- filter(elong_long, zone %in% c(2,3),
+                       year %in% c("X2009", "X2010", "X2011"))
+
+# select----
+# remove the zone column
+elong_no_zone <- select(elong_long, -zone)
+
+# dplyr allows you to rename and reorder the column
+elong_no_zone <- select(elong_long, Year=year, Shrub_ID=indiv, Growth=length)
+
+# mutate----
+elong_total <- mutate(elong, total_growth = X2007 + X2008 + X2009 + X2010 + X2011 + X2012)
+
+# group_by----
+elong_grouped <- group_by(elong_long, indiv)  # grouping our dataset by individual
+
+# summarise----
+summary1 <- summarise(elong_long, total_growth=sum(length))
+summary2 <- summarise(elong_grouped, total_growth=sum(length))
+
+summary3 <- summarise(elong_grouped, total_growth=sum(length),
+                      mean_growth=mean(length),
+                      sd_growth=sd(length))
+
+# join----
+treatments <- read.csv("EmpetrumTreatments.csv", header=TRUE, sep=";")
+# join by ID, need to tell it which column names match with which
+experiment <- left_join(elong_long, treatments, by=c("indiv"="Indiv", "zone"="Zone"))
+
+
+boxplot(length~Treatment, data=experiment)
