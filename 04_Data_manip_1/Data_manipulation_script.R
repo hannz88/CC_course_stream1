@@ -102,7 +102,7 @@ boxplot(Length ~ Year, data = elongation_long,
         xlab = "Year", ylab = "Elongation (cm)", 
         main = "Annual growth of Empetrum hermaphroditum")
 
-## Dplyr----
+  ## Dplyr----
 # rename variables----
 # change the names of the columns and overwriting the dataframe
 elong_long <- rename(elong_long, zone=Zone, indiv=Indiv, year=Year, length=Length)
